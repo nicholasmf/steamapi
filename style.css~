@@ -1,7 +1,0 @@
-.games
-{
-	width: 50em;
-	border: 1px solid black;
-	padding: 3px;
-	border-radius: 10px;
-}
