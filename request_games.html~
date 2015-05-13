@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<script>
+			var running;
+			var xmlhttp;
+			var countOk = 0;
+			var countFail = 0;
+
+			var div = document.getElementById('bdy');
+			var divS = document.getElementById('state');
+			var divL = document.getElementById('log');
+
+			function getMatches ()
+			{
+
+				xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function ()
+				{
+					// Ready
+					if (xmlhttp.readyState == 1)
+					{
+						loading_message();
+						running = 1;
+					}
+					// Success
+					else if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+					{
+						//div.innerHTML += xmlhttp.responseText;
+						var res = xmlhttp.responseText.split("-");
+						if (res[1] == "download completed") countOk++;
+						else countFail++;
+						div.innerHTML = "Files downloaded: "+countOk+" / Failed downloads: "+countFail;
+						divL.innerHTML += xmlhttp.responseText+"<br>";
+						divL.scrollTop = divL.scrollHeight;
+						running = 0;
+						clearInterval(interval);
+						divS.innerHTML = "Ready<br>";
+					}
+				}
+				if (!running)
+				{
+					xmlhttp.open("GET", "./download_live.php");
+					xmlhttp.send();
+				}
+				else if (running)
+				{
+					alert("Aguarde a busca atual");
+				}
+			}
+
+			var interval;
+			function loading_message()
+			{
+				var str = "Processing . . .";
+				var div = document.getElementById('state');
+				div.innerHTML = "Processing";
+				var count = div.innerHTML.length;
+				
+				interval = setInterval(function ()
+				{
+					div.innerHTML = str[count++];
+					if (count > str.length)
+					{
+						//alert("here");
+						div.innerHTML = "Processing";
+						count = div.innerHTML.length;
+					}
+				}, 100);
+			}
+
+			function showJson()
+			{
+				xmlhttp2 = new XMLHttpRequest();
+				xmlhttp2.onreadystatechange = function ()
+				{
+					// Ready
+					if (xmlhttp2.readyState == 1)
+					{
+						loading_message();
+						running = 1;
+					}
+					// Success
+					else if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200)
+					{
+						divL.innerHTML = xmlhttp2.responseText+"<br>";
+						divL.scrollTop = divL.scrollHeight;
+						running = 0;
+						clearInterval(interval);
+						divS.innerHTML = "Ready<br>";
+					}
+				}
+				if (!running)
+				{
+					xmlhttp2.open("GET", "./getLive.json");
+					xmlhttp2.send();
+				}
+				else if (running)
+				{
+					alert("Aguarde a busca atual");
+				}			
+			}
+
+			window.onload = function () { /*getMatches();*/ };
+		</script>
+	</head>
+	<body>
+		<input type = 'button' value = 'Update' onClick = 'getMatches()'>
+		<input type = 'button' value = 'Show live.json' onClick = 'showJson()'>
+		<div id = 'state'>Wainting</div>
+		<div id = 'bdy'></div>
+		<div id = 'log' style = "overflow: scroll; width: 80em; height: 30em; border: 1px solid black"></div>
+	</body>
+</html>

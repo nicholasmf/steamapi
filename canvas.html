@@ -1,0 +1,94 @@
+<html>
+	<head>
+		<title>Testing canvas</title>
+		<script>
+			// chart data
+			var arrVisitors = new Array();
+			arrVisitors[0] = "2007, 750";
+			arrVisitors[1] = "2008, 425";
+			arrVisitors[2] = "2009, 960";
+			arrVisitors[3] = "2010, 700";
+			arrVisitors[4] = "2011, 800";
+			arrVisitors[5] = "2012, 975";
+			arrVisitors[6] = "2013, 375";
+			arrVisitors[7] = "2014, 775";
+
+			var canvas;
+			var context;
+			var cWidth, cHeight, cMargin, cSpace;
+			var cMarginSpace, cMarginHeight;
+			var bWidth, bMargin, totalBars, maxDataValue;
+			var bWidthMargin;
+			var ctr, numctr, speed;
+			var totalLabelsOnYAxis;
+
+			function barChart()
+			{
+				canvas = document.getElementById('bchart');
+				if (canvas && canvas.getContext)
+				{
+					context = canvas.getContext('2d');
+				}
+				chartSettings();	
+				drawAxisLabelMarkers();
+				drawChartWithAnimation();
+			}
+
+			// Initialize the char and bar values
+			function chartSettings()
+			{
+				cMargin = 25;
+				cSpace = 60;
+				cHeight = canvas.height - 2*cMargin - cSpace;
+				cWidth = canvas.width - 2*cMargin - cSpace;
+				cMarginSpace = cMargin + cSpace;
+				cMarginHeight = cMargin + cHeight;
+				// bar properties
+				bMargin = 15;
+				totalBars = arrVisitors.lenght;
+				bWidth = (cWidth/totalBars) - bMargin;
+
+				// find maximum value to plot on char 
+				maxDataValue = 0;
+				for (i = 0; i < totalBars; i++)
+				{
+					var arrVal = arrVisitors[i].split(",");
+					var barVal = parseInt(arrVal[1]);
+					if (parseInt(barVal) > parseInt(maxDataValue))
+						maxDataValue = barVal;
+				}
+
+				
+			}
+
+			// draw X and Y axis
+			function drawAxis (x, y, X, Y)
+			{
+				context.beginPath();
+				context.moveTo(x, y);
+				context.lineTo(X, Y);
+				context.closePath();
+				context.stroke();            
+			}
+
+			function drawMarkers()
+			{
+
+			}
+
+			// X axis
+			context.textAlign = 'center';
+			
+
+			window.onload = funtion () { barChart(); };
+		</script>
+	</head>
+
+	<body>
+		<canvas id = "bchart" height = "400" width = "600">
+			Your browser does not support canvas
+		</canvas>
+
+		
+	</body>
+</html>
