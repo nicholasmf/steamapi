@@ -4,7 +4,10 @@
 	curl_setopt($curl, CURLOPT_URL, $jsonurl);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	// get output	
-	$json1 = curl_exec($curl);
+	do
+	{
+		$json1 = curl_exec($curl);
+	} while ($json1 == false);
 	curl_close($curl);
 
 	file_put_contents ("./heroes.json", $json1);
