@@ -12,6 +12,7 @@
 			arrVisitors[5] = "2012, 975";
 			arrVisitors[6] = "2013, 375";
 			arrVisitors[7] = "2014, 775";
+			arrVisitors[8] = "2015, 1000";
 
 			var canvas;
 			var context;
@@ -33,19 +34,18 @@
 				chartSettings();	
 				drawAxisLabelMarkers();
 				drawChartWithAnimation();
-/*
-*/
 			}
 
 			// Initialize the char and bar values
 			function chartSettings()
 			{
-				cMargin = 25;
-				cSpace = 60;
-				cHeight = canvas.height - 2*cMargin - cSpace;
-				cWidth = canvas.width - 2*cMargin - cSpace;
+				cMargin = 25;							// column margin
+				cSpace = 60;							// column spacing
+				cHeight = canvas.height - 2*cMargin - cSpace;			// column height
+				cWidth = canvas.width - 2*cMargin - cSpace;			// column width
 				cMarginSpace = cMargin + cSpace;
 				cMarginHeight = cMargin + cHeight;
+
 				// bar properties
 				bMargin = 15;
 				totalBars = arrVisitors.length;
@@ -102,10 +102,9 @@
 				for (var i = 0; i <= totLabelsOnYAxis; i++)
 				{
 					markerVal = i * numMarkers;
-					//alert(markerVal);
-					markerValHt = i * numMarkers * cHeight;
-					var xMarkers = cMarginSpace - 5;
-					var yMarkers = cMarginHeight - (markerValHt / maxDataValue);
+					markerValHt = i * numMarkers * cWidth;
+					var xMarkers = cMarginSpace + (markerValHt / maxDataValue);
+					var yMarkers = cMarginHeight + 10;
 					context.fillText(markerVal, xMarkers, yMarkers, cSpace);
 				}
 
@@ -116,22 +115,24 @@
 					arrval = arrVisitors[i].split(",");
 					name = arrval[0];
 
-					markerXPos = cMarginSpace + bMargin + (i * (bWidth + bMargin)) + (bWidth / 2);
-					markerYPos = cMarginHeight + 10;
+					markerXPos = cMarginSpace - 20;
+					markerYPos = cMarginHeight - (i * (35)) - (bWidth / 2);
 					context.fillText(name, markerXPos, markerYPos, bWidth);
 				}
+
+				//context.fillText("Test", cWidth + cMarginSpace, cMarginHeight);
 
 				context.save();
 
 				// Add Y axis title
 				context.translate(cMargin + 10, cHeight / 2);
 				context.rotate(Math.PI * -90/180);
-				context.fillText("Visitors in Thousands", 0, 0);
+				context.fillText('Year Wise', 0, 0);
 
 				context.restore();
 
 				// add X axis title
-				context.fillText('Year Wise', cMarginSpace + (cWidth / 2), cMarginHeight + 30);
+				context.fillText("Visitors in Thousands", cMarginSpace + (cWidth / 2), cMarginHeight + 30);
 			}
 
 			function drawChartWithAnimation()
@@ -143,11 +144,14 @@
 					var arrVal = arrVisitors[i].split(",");
 					bVal = parseInt(arrVal[1]);
 					//alert(bVal);
-					bHt = (bVal * cHeight / maxDataValue) / numctr * ctr;
-					bX = cMarginSpace + (i * (bWidth + bMargin)) + bMargin;
-					bY = cMarginHeight - bHt - 2;
-					drawRectangle(bX, bY, bWidth, bHt, true);
+					bHt = (bVal * cWidth / maxDataValue) / numctr * ctr;
+					bX = cMarginSpace + bHt - 2;
+					bY = cMarginHeight - (i * (35)) - (bWidth / 2);
+					drawRectangle(cMarginSpace + 2, bY-15, bX - cMarginSpace, 30, true);
+					//context.fillText ("=", bX, bY);
 				}
+
+				//context.fillText ("Test", bX, bY);
 
 				// timeout runs and checks if bars have reached the desired height
 				// if not, keep growing
@@ -167,7 +171,7 @@
 
 				if (fill)
 				{
-					var gradient = context.createLinearGradient(0, 0, 0, 300);
+					var gradient = context.createLinearGradient(500, 0, cMarginSpace, 0);
 					gradient.addColorStop(0, 'green');
 					gradient.addColorStop(1, 'rgba(67,203,36,.15)');
 					context.fillStyle = gradient;
@@ -175,8 +179,7 @@
 					context.fill();
 				}
 			}
-/*
-*/
+
 			window.onload = function () { barChart(); };
 		</script>
 	</head>
