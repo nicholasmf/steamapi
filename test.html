@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<title>HTML test</title>
+		<script type = "text/javascript" src = "./barchart.js"></script>
+		<script>
+			var canvas;
+			var chart;
+
+			var arrVisitors = new Array();
+			arrVisitors[0] = "2007, 750";
+			arrVisitors[1] = "2008, 425";
+			arrVisitors[2] = "2009, 960";
+			arrVisitors[3] = "2010, 700";
+			arrVisitors[4] = "2011, 800";
+			arrVisitors[5] = "2012, 975";
+			arrVisitors[6] = "2013, 375";
+			arrVisitors[7] = "2014, 775";
+			arrVisitors[8] = "2015, 1000";
+			arrVisitors[9] = "2016, 453";
+			arrVisitors[10] = "2017, 200";
+
+
+			function init()
+			{
+				//canvas = document.getElementById("c1");
+				canvas = createCanvas("c1", 600, 400);
+				document.body.appendChild(canvas);
+
+				chart = new barChart(canvas, arrVisitors);
+				chart.setPosition(100, 50);
+			}
+
+			window.onload = function () { init(); };
+		</script>
+	</head>
+
+	<body>
+	</body>
+</html>

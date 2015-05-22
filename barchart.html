@@ -13,6 +13,8 @@
 			arrVisitors[6] = "2013, 375";
 			arrVisitors[7] = "2014, 775";
 			arrVisitors[8] = "2015, 1000";
+			arrVisitors[9] = "2016, 453";
+			arrVisitors[10] = "2017, 200";
 
 			var canvas;
 			var context;
@@ -20,6 +22,7 @@
 			var cMarginSpace, cMarginHeight;
 			var bWidth, bMargin, totalBars, maxDataValue;
 			var bWidthMargin;
+			var bHieght, bHeightMargin;
 			var ctr, numctr, speed;
 			var totLabelsOnYAxis;
 
@@ -50,6 +53,7 @@
 				bMargin = 15;
 				totalBars = arrVisitors.length;
 				bWidth = (cWidth/totalBars) - bMargin;
+				bHeight = (cHeight/totalBars) - bMargin;
 
 				// find maximum value to plot on char 
 				maxDataValue = 0;
@@ -116,7 +120,7 @@
 					name = arrval[0];
 
 					markerXPos = cMarginSpace - 20;
-					markerYPos = cMarginHeight - (i * (35)) - (bWidth / 2);
+					markerYPos = cMarginHeight - (i * (bHeight+bMargin)) - (bHeight / 2);
 					context.fillText(name, markerXPos, markerYPos, bWidth);
 				}
 
@@ -137,6 +141,15 @@
 
 			function drawChartWithAnimation()
 			{
+				context.save();
+				context.beginPath();
+				context.rect(cMarginSpace + 1, 0, cWidth+cMargin, cHeight+cMargin - 2);
+				context.closePath();
+				//context.strokeStyle = "white";				
+				//context.stroke();
+				context.fillStyle = "white";
+				context.fill();
+				context.restore();
 
 				// Loop through the total vars and draw
 				for (var i = 0; i < totalBars; i++)
@@ -146,12 +159,21 @@
 					//alert(bVal);
 					bHt = (bVal * cWidth / maxDataValue) / numctr * ctr;
 					bX = cMarginSpace + bHt - 2;
-					bY = cMarginHeight - (i * (35)) - (bWidth / 2);
-					drawRectangle(cMarginSpace + 2, bY-15, bX - cMarginSpace, 30, true);
+					bY = cMarginHeight - (i * (bHeight+bMargin)) - bMargin - (bHeight);
+					drawRectangle(cMarginSpace + 2, bY, bX - cMarginSpace, bHeight, true);
 					//context.fillText ("=", bX, bY);
+					//if (numctr == ctr)
+					//{
+						context.save();
+						context.strokeStyle = "black";
+						context.fillStyle = "black";				
+						context.fillText (bVal, bX+15, bY+10);
+						context.restore();
+					//}
 				}
 
-				//context.fillText ("Test", bX, bY);
+
+
 
 				// timeout runs and checks if bars have reached the desired height
 				// if not, keep growing
